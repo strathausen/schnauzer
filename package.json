@@ -1,0 +1,29 @@
+{
+  "author": "Johann Philipp Strathausen <strathausen@gmail.com> (http://stratha.us)",
+  "name": "schnauzer",
+  "description": "Command-line and stream wrapper for Handlebars mustache implementation",
+  "version": "0.0.1",
+  "homepage": "http://strathausen.github.com/schnauzer",
+  "keywords": [ 'hbs','handlebars','mustache' ],
+  "repository": {
+    "type":"git",
+    "url": "git@github.com/strathausen/yamlmarkdown.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/jashkenas/coffee-script/raw/master/LICENSE"
+    }
+  ],
+  "scripts": {
+    "test": "make test"
+  }, {
+    "schnauzer": "./bin/schnauzer.js"
+  },
+  "engines": {
+    "node": "~0.8.3"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {}
+}
