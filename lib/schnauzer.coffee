@@ -5,13 +5,18 @@ Stream api wrapper for the handlebars mustache implementation
 @author Johann Philipp Strathausen <strathausen@gmail.com>
 
 ###
-_       = require 'underscore'
+
 mapStream = require 'map-stream'
+hbs       = require 'handlebars'
 
 class Schnauzer
-  render: () ->
+  render: (template, layout) =>
+    tpl = layout or template
+    if layout?
+      hbs.registerPartial 'body', template
+    hbs.compile tpl
 
-  stream: (defaults) => mapStream (content, cb) =>
-    cb null, @parse content.toString(), defaults
+  stream: (template, layout) => mapStream (content, cb) =>
+    cb null, (@render template, layout) JSON.parse content
 
 module.exports = new Schnauzer
