@@ -1,11 +1,13 @@
 ###
 
-@author 
+Command line utility to render json in handlebars templates
+
+@author Johann Philipp Strathausen <strathausen@gmail.com>
 
 ###
 
 program   = require 'commander'
-schnauzer = require './schnauzer'
+schnauzer = require '../'
 path      = require 'path'
 fs        = require 'fs'
 
