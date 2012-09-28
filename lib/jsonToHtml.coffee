@@ -8,6 +8,7 @@ program   = require 'commander'
 schnauzer = require './schnauzer'
 path      = require 'path'
 fs        = require 'fs'
+async     = require 'async'
 
 program
   .description('Render json in mustache templates. If the optional
@@ -28,13 +29,15 @@ else
   process.stdin.resume()
   sourceStream = process.stdin
 
-body = fs.readFileSync program.body, 'utf8'
-if program.layout?
-  layout = fs.readFileSync program.layout, 'utf8'
-  rendererStream = schnauzer.stream body, layout
-else
-  rendererStream = schnauzer.stream body
+async.parallel
+  layout: (cb) ->
+    return do cb unless program.layout
+    fs.readFile program.layout, 'utf8', cb
 
-sourceStream
-  .pipe(rendererStream)
-  .pipe(process.stdout)
+  body: async.apply fs.readFile, program.body, 'utf8'
+, (err, { layout, body }) ->
+  rendererStream = schnauzer.stream body, layout
+
+  sourceStream
+    .pipe(rendererStream)
+    .pipe(process.stdout)
