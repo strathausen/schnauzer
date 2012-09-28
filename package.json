@@ -7,7 +7,8 @@
   "keywords": [
     "hbs",
     "handlebars",
-    "mustache"
+    "mustache",
+    "mumpitz"
   ],
   "repository": {
     "type": "git",
@@ -20,8 +21,10 @@
     }
   ],
   "scripts": {
-    "test": "make test",
-    "schnauzer": "./bin/schnauzer.js"
+    "test": "make test"
+  },
+  "bin": {
+    "json2html": "./bin/json2html.js"
   },
   "engines": {
     "node": "~0.8.3"

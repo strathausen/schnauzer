@@ -15,10 +15,10 @@ Schnauzer = (function() {
 
   function Schnauzer() {
     this.stream = __bind(this.stream, this);
-    this.render = __bind(this.render, this);
+    this.compile = __bind(this.compile, this);
   }
 
-  Schnauzer.prototype.render = function(template, layout) {
+  Schnauzer.prototype.compile = function(template, layout) {
     var tpl;
     tpl = layout || template;
     if (layout != null) hbs.registerPartial('body', template);
@@ -28,7 +28,7 @@ Schnauzer = (function() {
   Schnauzer.prototype.stream = function(template, layout) {
     var _this = this;
     return mapStream(function(content, cb) {
-      return cb(null, (_this.render(template, layout))(JSON.parse(content)));
+      return cb(null, (_this.compile(template, layout))(JSON.parse(content)));
     });
   };
 
