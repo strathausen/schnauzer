@@ -3,13 +3,13 @@ assert    = require 'assert'
 { exec }  = require 'child_process'
 
 describe 'schnauzer - mustache/handlebars', ->
-  describe 'render function', ->
+  describe 'compile', ->
     it 'with partial', ->
-      renderer = schnauzer.render '<bar>{{title}}</bar>', '<foo>{{>body}}</foo>'
+      renderer = schnauzer.compile '<bar>{{title}}</bar>', '<foo>{{>body}}</foo>'
       result = renderer title: 'Titlul'
 
     it 'without partial', ->
-      renderer = schnauzer.render '<bar>{{title}}</bar>'
+      renderer = schnauzer.compile '<bar>{{title}}</bar>'
       result = renderer title: 'Titlul'
       assert.equal result, '<bar>Titlul</bar>'
 

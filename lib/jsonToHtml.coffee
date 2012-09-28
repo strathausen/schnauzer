@@ -28,7 +28,7 @@ else
   process.stdin.resume()
   sourceStream = process.stdin
 
-body = fs.readFileSync program.body, 'utf8' 
+body = fs.readFileSync program.body, 'utf8'
 if program.layout?
   layout = fs.readFileSync program.layout, 'utf8'
   rendererStream = schnauzer.stream body, layout
