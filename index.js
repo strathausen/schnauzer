@@ -40,10 +40,26 @@ Schnauzer = (function() {
         content = JSON.parse(content);
       }
       return async.parallel({
-        template: async.apply(fs.readFile, fTemplate, 'utf8'),
+        template: function(cb) {
+          if (_this.templates[fTemplate] != null) {
+            return cb(null, _this.templates[fTemplate]);
+          }
+          return fs.readFile(fTemplate, 'utf8', function(err, template) {
+            if (err) return cb(err);
+            _this.templates[fTemplate] = template;
+            return cb(null, template);
+          });
+        },
         layout: function(cb) {
           if (!fLayout) return cb();
-          return fs.readFile(fLayout, 'utf8', cb);
+          if (_this.templates[fLayout] != null) {
+            return cb(null, _this.templates[fLayout]);
+          }
+          return fs.readFile(fLayout, 'utf8', function(err, layout) {
+            if (err) return cb(err);
+            _this.templates[fLayout] = layout;
+            return cb(null, layout);
+          });
         }
       }, function(err, _arg) {
         var layout, template;

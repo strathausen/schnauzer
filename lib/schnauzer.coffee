@@ -31,11 +31,23 @@ class Schnauzer
     if typeof content is 'string' or content instanceof Buffer
       content = JSON.parse content
     async.parallel
-      template: async.apply fs.readFile, fTemplate, 'utf8'
+      template: (cb) =>
+        if @templates[fTemplate]?
+          return cb null, @templates[fTemplate]
+        fs.readFile fTemplate, 'utf8', (err, template) =>
+          return cb err if err
+          @templates[fTemplate] = template
+          cb null, template
 
-      layout: (cb) ->
+      layout: (cb) =>
         return do cb unless fLayout
-        fs.readFile fLayout, 'utf8', cb
+        if @templates[fLayout]?
+          return cb null, @templates[fLayout]
+        fs.readFile fLayout, 'utf8', (err, layout) =>
+          return cb err if err
+          @templates[fLayout] = layout
+          cb null, layout
+
     , (err, { template, layout }) =>
       cb null, (@compile template, layout) content
 
