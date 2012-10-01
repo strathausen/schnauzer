@@ -8,6 +8,7 @@ describe 'schnauzer - mustache/handlebars', ->
     it 'with partial', ->
       renderer = schnauzer.compile '<bar>{{title}}</bar>', '<foo>{{>body}}</foo>'
       result = renderer title: 'Titlul'
+      assert.equal result, '<foo><bar>Titlul</bar></foo>'
 
     it 'without partial', ->
       renderer = schnauzer.compile '<bar>{{title}}</bar>'
@@ -15,19 +16,60 @@ describe 'schnauzer - mustache/handlebars', ->
       assert.equal result, '<bar>Titlul</bar>'
 
   describe '#stream', ->
-    it 'with partial', (done) ->
-      doc =
-        title: 'Titlul'
-        template: "#{__dirname}/template.mustache"
-        layout: "#{__dirname}/layout.mustache"
-      stream = schnauzer.stream()
-      (stream).pipe mapStream (html) ->
-        assert.equal html, '<foo><bar>Titlul</bar>\n</foo>\n'
-        do done
-      stream.write doc
+    describe 'templates as object properties', ->
+      it 'with partial', (done) ->
+        doc =
+          title: 'Titlul'
+          template: "#{__dirname}/template.mustache"
+          layout: "#{__dirname}/layout.mustache"
+        stream = schnauzer.stream()
+        (stream).pipe mapStream (html) ->
+          assert.equal html, '<foo><bar>Titlul</bar>\n</foo>\n'
+          do done
+        stream.write doc
 
-    it 'without partial', (done) ->
-      do done
+      it 'without partial', (done) ->
+        doc =
+          title: 'Titlul'
+          template: "#{__dirname}/template.mustache"
+        stream = schnauzer.stream()
+        (stream).pipe mapStream (html) ->
+          assert.equal html, '<bar>Titlul</bar>\n'
+          do done
+        stream.write doc
+        
+    describe 'templates as arguments', ->
+      it 'with partial', (done) ->
+        doc =
+          title: 'Titlul'
+        template = "#{__dirname}/template.mustache"
+        layout = "#{__dirname}/layout.mustache"
+        stream = schnauzer.stream template, layout
+        (stream).pipe mapStream (html) ->
+          assert.equal html, '<foo><bar>Titlul</bar>\n</foo>\n'
+          do done
+        stream.write doc
+
+      it 'without partial', (done) ->
+        doc =
+          title: 'Titlul'
+        template = "#{__dirname}/template.mustache"
+        stream = schnauzer.stream template
+        (stream).pipe mapStream (html) ->
+          assert.equal html, '<bar>Titlul</bar>\n'
+          do done
+        stream.write doc
+
+    describe 'content as string', ->
+      it 'without partial', (done) ->
+        doc =
+          title: 'Titlul'
+        template = "#{__dirname}/template.mustache"
+        stream = schnauzer.stream template
+        (stream).pipe mapStream (html) ->
+          assert.equal html, '<bar>Titlul</bar>\n'
+          do done
+        stream.write JSON.stringify doc
 
   describe 'cli', ->
     it 'with partial', (done) ->
