@@ -1,9 +1,10 @@
 schnauzer = require '../lib/schnauzer'
 assert    = require 'assert'
 { exec }  = require 'child_process'
+mapStream = require 'map-stream'
 
 describe 'schnauzer - mustache/handlebars', ->
-  describe 'compile', ->
+  describe '#compile', ->
     it 'with partial', ->
       renderer = schnauzer.compile '<bar>{{title}}</bar>', '<foo>{{>body}}</foo>'
       result = renderer title: 'Titlul'
@@ -13,7 +14,22 @@ describe 'schnauzer - mustache/handlebars', ->
       result = renderer title: 'Titlul'
       assert.equal result, '<bar>Titlul</bar>'
 
-  describe 'stream', ->
+  describe '#stream', ->
+    it 'with partial', (done) ->
+      doc =
+        title: 'Titlul'
+        template: "#{__dirname}/template.mustache"
+        layout: "#{__dirname}/layout.mustache"
+      stream = schnauzer.stream()
+      (stream).pipe mapStream (html) ->
+        assert.equal html, '<foo><bar>Titlul</bar>\n</foo>\n'
+        do done
+      stream.write doc
+
+    it 'without partial', (done) ->
+      do done
+
+  describe 'cli', ->
     it 'with partial', (done) ->
       cmd =
         "echo \"{\\\"title\\\":\\\"Titlul\\\"}\" |

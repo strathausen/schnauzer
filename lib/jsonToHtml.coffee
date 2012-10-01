@@ -8,9 +8,6 @@ Command line utility to render json in handlebars templates
 
 program   = require 'commander'
 schnauzer = require '../'
-path      = require 'path'
-fs        = require 'fs'
-async     = require 'async'
 
 program
   .description('Render json in mustache templates. If the optional
@@ -31,15 +28,8 @@ else
   process.stdin.resume()
   sourceStream = process.stdin
 
-async.parallel
-  layout: (cb) ->
-    return do cb unless program.layout
-    fs.readFile program.layout, 'utf8', cb
+rendererStream = schnauzer.stream program.body, program.layout
 
-  body: async.apply fs.readFile, program.body, 'utf8'
-, (err, { layout, body }) ->
-  rendererStream = schnauzer.stream body, layout
-
-  sourceStream
-    .pipe(rendererStream)
-    .pipe(process.stdout)
+sourceStream
+  .pipe(rendererStream)
+  .pipe(process.stdout)
