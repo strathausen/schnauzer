@@ -2,7 +2,7 @@
   "author": "Johann Philipp Strathausen <strathausen@gmail.com> (http://stratha.us)",
   "name": "schnauzer",
   "description": "Command-line and stream wrapper for Handlebars mustache implementation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "http://strathausen.github.com/schnauzer",
   "keywords": [
     "hbs",
